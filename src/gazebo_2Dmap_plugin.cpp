@@ -304,7 +304,7 @@ void OccupancyMapFromWorld::CreateOccupancyMap()
   //all cells are initially unknown
   std::fill(occupancy_map_->data.begin(), occupancy_map_->data.end(), -1);
   occupancy_map_->header.stamp = ros::Time::now();
-  occupancy_map_->header.frame_id = "odom"; //TODO map frame
+  occupancy_map_->header.frame_id = "map"; //TODO map frame
   occupancy_map_->info.map_load_time = ros::Time(0);
   occupancy_map_->info.resolution = map_resolution_;
   occupancy_map_->info.width = cells_size_x;
@@ -334,9 +334,10 @@ void OccupancyMapFromWorld::CreateOccupancyMap()
 
   //find initial robot cell
   unsigned int cell_x, cell_y, map_index;
+  ROS_INFO("changing the initial position of robot into cell coordinate...")
   world2cell(robot_x, robot_y, map_size_x_, map_size_y_, map_resolution_,
              cell_x, cell_y);
-
+  ROS_INFO("now robot's in cell coordinate")
   if(!cell2index(cell_x, cell_y, cells_size_x, cells_size_y, map_index))
   {
     ROS_ERROR_NAMED(name_, "initial robot pos is outside map, could not create "
