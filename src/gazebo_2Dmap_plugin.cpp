@@ -293,8 +293,7 @@ bool OccupancyMapFromWorld::index2cell(int index, unsigned int cell_size_x,
 
 void OccupancyMapFromWorld::CreateOccupancyMap()
 {
-  //TODO map origin different from (0,0)
-  vector3d map_origin(0,0,map_height_);
+  vector3d world_origin(0,0,map_height_);
 
   unsigned int cells_size_x = map_size_x_ / map_resolution_;
   unsigned int cells_size_y = map_size_y_ / map_resolution_;
@@ -304,19 +303,19 @@ void OccupancyMapFromWorld::CreateOccupancyMap()
   //all cells are initially unknown
   std::fill(occupancy_map_->data.begin(), occupancy_map_->data.end(), -1);
   occupancy_map_->header.stamp = ros::Time::now();
-  occupancy_map_->header.frame_id = "odom"; //TODO map frame
+  occupancy_map_->header.frame_id = "map"; //TODO map frame
   occupancy_map_->info.map_load_time = ros::Time(0);
   occupancy_map_->info.resolution = map_resolution_;
   occupancy_map_->info.width = cells_size_x;
   occupancy_map_->info.height = cells_size_y;
 #if GAZEBO_MAJOR_VERSION >= 9
-  occupancy_map_->info.origin.position.x = map_origin.X() - map_size_x_ / 2;
-  occupancy_map_->info.origin.position.y = map_origin.Y() - map_size_y_ / 2;
-  occupancy_map_->info.origin.position.z = map_origin.Z();
+  occupancy_map_->info.origin.position.x = world_origin.X() - map_size_x_ / 2;
+  occupancy_map_->info.origin.position.y = world_origin.Y() - map_size_y_ / 2;
+  occupancy_map_->info.origin.position.z = world_origin.Z();
 #else
-  occupancy_map_->info.origin.position.x = map_origin.x - map_size_x_ / 2;
-  occupancy_map_->info.origin.position.y = map_origin.y - map_size_y_ / 2;
-  occupancy_map_->info.origin.position.z = map_origin.z;
+  occupancy_map_->info.origin.position.x = world_origin.x - map_size_x_ / 2;
+  occupancy_map_->info.origin.position.y = world_origin.y - map_size_y_ / 2;
+  occupancy_map_->info.origin.position.z = world_origin.z;
 #endif
   occupancy_map_->info.origin.orientation.w = 1;
 
