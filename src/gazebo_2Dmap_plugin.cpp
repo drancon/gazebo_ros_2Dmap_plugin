@@ -265,7 +265,7 @@ bool OccupancyMapFromWorld::cell2index(int cell_x, int cell_y,
 {
   if(cell_x >= 0 && cell_x < cell_size_x && cell_y >= 0 && cell_y < cell_size_y)
   {
-    map_index = cell_y * cell_size_y + cell_x;
+    map_index = cell_y * cell_size_x + cell_x;
     return true;
   }
   else
@@ -279,7 +279,7 @@ bool OccupancyMapFromWorld::index2cell(int index, unsigned int cell_size_x,
                                        unsigned int cell_size_y,
                                        unsigned int& cell_x, unsigned int& cell_y)
 {
-  cell_y = index / cell_size_y;
+  cell_y = index / cell_size_x;
   cell_x = index % cell_size_x;
 
   if(cell_x >= 0 && cell_x < cell_size_x && cell_y >= 0 && cell_y < cell_size_y)
@@ -333,10 +333,10 @@ void OccupancyMapFromWorld::CreateOccupancyMap()
 
   //find initial robot cell
   unsigned int cell_x, cell_y, map_index;
-  ROS_INFO("changing the initial position of robot into cell coordinate...")
+  ROS_INFO("changing the initial position of robot into cell coordinate...");
   world2cell(robot_x, robot_y, map_size_x_, map_size_y_, map_resolution_,
              cell_x, cell_y);
-  ROS_INFO("now robot's in cell coordinate")
+  ROS_INFO("now robot's in cell coordinate");
   if(!cell2index(cell_x, cell_y, cells_size_x, cells_size_y, map_index))
   {
     ROS_ERROR_NAMED(name_, "initial robot pos is outside map, could not create "
